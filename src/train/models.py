@@ -3,6 +3,7 @@ import xmlrpclib
 
 from django.db import models
 from django.contrib.sitemaps import ping_google
+from django.contrib.markup.templatetags.markup import textile
 
 import tagging
 from tagging.models import TagManager
@@ -28,6 +29,7 @@ class Article(models.Model):
     description = models.CharField(max_length=250,null=True,blank=True,help_text=u'Useful for search engines.')
     keywords = models.CharField(max_length=250,null=True,blank=True,help_text=u'Comma seperated keywords.')
     content = models.TextField(help_text=u'Use Textile for formatting.')
+    html = models.TextField(blank=True, null=True)
     tags = TagField(help_text=u'Separate tags with commas or spaces.')
     pub_date = models.DateTimeField(u'Date posted', default=datetime.datetime.today)
     slug = models.SlugField(
@@ -52,6 +54,7 @@ class Article(models.Model):
         ordering = ["-pub_date"]
         
     def save(self):
+        self.html = textile(self.content)
         super(Article, self).save()
         if not DEBUG:
             try:

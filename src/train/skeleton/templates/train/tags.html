@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% load render_tag_list %}
+
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+
+<h1>Tags</h1>
+
+{% render_tag_list tags %}
+
+{% endblock %}

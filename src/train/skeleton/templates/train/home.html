@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load render_article %}
+
+{% block title %}Home{% endblock %}
+
+{% block body_class %} class="home"{% endblock %}
+
+{% block header %}
+<div id="header" class="vcard -foaf-Person">
+    <h1><a href="/" class="org foaf-weblog"></a></h1>
+</div>
+{% endblock %}
+
+{% block content %}
+
+{% if object_list %}
+    <ol class="articles">
+    {% for article in object_list %}
+        {% ifnotequal article.id lead_article:first.id %}
+            {% ifequal article.article_type "link" %}
+                {% render_link article %}
+                {% else %}
+                {% render_article article %}
+            {% endifequal %}
+        {% endifnotequal %}
+    {% endfor %}
+    </ol>
+{% endif %}
+
+{% ifnotequal number_of_pages "1" %}
+    <ol class="pager">
+        <li>
+        {% if has_previous %}
+            <a href="?page={{previous}}">Previous</a>
+        {% else %}
+            Previous
+        {% endif %}
+        </li>
+        {% for pager in page_range %}
+            {% ifequal pager page %}
+                <li class="current">{{pager}}</li>                
+            {% else %}
+                <li><a href="?page={{pager}}">{{pager}}</a></li>
+            {% endifequal %}
+        {% endfor %}
+        <li>
+        {% if has_next %}
+            <a href="?page={{next}}">Next</a>
+        {% else %}
+            Next
+        {% endif %}
+        </li>
+    </ol>
+{% endifnotequal %}
+
+{% endblock %}
+
+{% block navigation %}{% endblock %}
+
+{% block sidebar %}
+<div id="sidebar">
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% load render_tag_list tagging_tags comments %}
+{% tags_for_object article as tag_list %}
+{% get_comment_count for train.article article.id as comment_count %}
+
+<li class="article hentry">
+    <h2><a href="{{article.get_absolute_url}}">{{article.title}}</a></h2>
+    <div class="entry-content">{{article.html|safe|truncatewords_html:"100" }}</div>
+    <p class="foot"><a href="{{article.get_absolute_url}}">#</a> - <a href="{{article.pub_date|date:"/Y/m/d/"}}"><abbr class="updated" title="{{article.pub_date}}">{{article.pub_date|date:"jS F Y"}}</abbr></a> - <a href="{{article.get_absolute_url}}#comments">{{comment_count}} comment{{comment_count|pluralize}}</a></p>
+</li>

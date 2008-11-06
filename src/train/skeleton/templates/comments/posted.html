@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Thanks for commenting.{% endblock %}
+
+{% block content %}
+    <h1>Thank you for your comment</h1>
+    <div class="head">
+        <p>All much appreciated.</p>
+    </div>
+    <p>Comments need moderating first so please wait a little while. In the mean time head back to <a href="{{comment.content_object.get_absolute_url}}">{{comment.content_object.title}}</a> or back <a href="/">home</a>.</p>  
+{% endblock %}

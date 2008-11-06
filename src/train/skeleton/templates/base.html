@@ -1,0 +1,33 @@
+{% load analytics %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head profile="http://purl.org/NET/erdf/profile">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/articles.rss" />
+    <link rel="alternate" type="application/atom+xml" title="ATOM Feed" href="/articles.atom" />
+    
+</head>
+<body{% block body_class %}{% endblock %}>
+
+    {% block header %}{% endblock %}
+
+    {% block navigation %}{% endblock %}
+
+    <div id="main">
+
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+            {% block sidebar %}
+            {% endblock %}
+        </div>
+        
+    </div>
+
+{% google_analytics %}
+
+</body>
+</html>

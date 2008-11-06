@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% load markup tagging_tags render_tag_list comments %}
+
+{% block title %}{{object.title}}{% endblock %}
+
+{% block description %}{{object.description}}{% endblock %}
+
+{% block keywords %}{{object.keywords}}{% endblock %}
+
+{% block body_class %}{% endblock %}
+
+{% block content %}
+
+{% get_comment_list for train.article object.id as comment_list %}
+{% get_comment_count for train.article object.id as comment_count %}
+
+{% tags_for_object object as tag_list %}
+
+<h1>{{object.title}}</h1>
+<div class="head">
+    {% if tag_list %}
+        {% render_tag_list tag_list %}
+    {% endif %}
+<p>{% if tag_list %}- {% endif %}<a href="{{object.pub_date|date:"/Y/m/d/"}}">{{object.pub_date|date:"jS F Y"}}</a></p>
+{% ifequal object.article_type "article" %}<p class="comments">- <a href="#comments">{{comment_count}} comment{{comment_count|pluralize}}</a></p>{% endifequal %}
+</div>
+
+{{object.html|safe}}
+
+{% if tag_list %}
+    <div id="related_articles">
+        <h2>Related articles</h2>
+        <ul>
+        {% for tag in tag_list %}
+            {% tagged_objects tag in train.Article as related_articles %}
+            {% if related_articles %}
+                {% for article in related_articles %}
+                    {% ifnotequal object.id article.id %}
+                        <li class="article"><a href="{{article.get_absolute_url}}">{{article}}</a> <span> - {{article.html|safe|striptags|truncatewords_html:10}}</span></li>
+                    {% endifnotequal %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% if object.enable_comments or comment_list %}
+<div id="comments">
+    <h2>Comments</h2>
+    
+{% if comment_list %}
+    <ol>
+    {% for comment in comment_list %}
+        {% if comment.is_public %}
+    	<li class="comment {% cycle odd,even %}" id="comment-{{ comment.id }}">
+        		{{ comment.comment|textile }}
+    		    <p class="foot">{{ comment.user_name|escape }} - <a href="#comment-{{comment.id}}">{{ comment.submit_date|date:"jS F Y" }}</a></p>
+    	</li>
+        {% endif %}
+    {% endfor %}
+    </ol>
+{% else %}
+    {% if object.enable_comments %}
+        <p>No comments yet.</p>
+    {% endif %}
+{% endif %}
+
+{% if object.enable_comments %}
+    <div class="form">
+        <h3>Leave a comments</h3>
+        {% render_comment_form for train.article object.id %}
+    </div>
+{% else %}
+    <p>Comments are now closed.</p>
+{% endif %}
+
+</div>
+{% endif %}
+
+
+{% endblock %}

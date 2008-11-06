@@ -1,0 +1,64 @@
+<project name="train" default="help" basedir=".">
+  
+  <property name="username" value=""/>
+  <property name="host" value=""/>
+  <property name="dir" value=""/>
+
+  <tstamp>
+    <format property="TODAY_UK" pattern="yyyyMMddhhmmss" locale="en,UK"/>
+  </tstamp>
+
+  <target name="help" description="show available commands" >
+    <exec executable="ant" dir="." failonerror="true">
+      <arg value="-p"/>
+    </exec>
+  </target>
+  
+  <target name="deploy-to" description="show where we are deploying to" >
+    <echo>${username}@${host}:${dir}</echo>
+  </target>
+
+  <target name="deploy" description="deploy usng rsync" >
+    <exec executable="rsync" dir="." failonerror="true">
+      <arg value="-r"/>
+      <arg value="."/>
+      <arg value="${username}@${host}:${dir}"/>
+      <arg value="--exclude-from=rsync.excludes"/>
+      <arg value="-v"/>
+    </exec>
+  </target>
+
+  <target name="deploy-test" description="test deploy usng rsync with the dry run flag set" >
+    <exec executable="rsync" dir="." failonerror="true">
+      <arg value="-r"/>
+      <arg value="."/>
+      <arg value="${username}@${host}:${dir}"/>
+      <arg value="--exclude-from=rsync.excludes"/>
+      <arg value="--dry-run"/>
+      <arg value="-v"/>
+    </exec>
+  </target>
+
+  <target name="backup" description="backup site" >
+    <exec executable="scp" dir="." failonerror="true">
+      <arg value="-r"/>
+      <arg value="${username}@${host}:${dir}"/>
+      <arg value="backups/${TODAY_UK}"/>
+    </exec>
+  </target>
+
+  <target name="backup-database" description="replace local database with live" >
+    <exec executable="scp" dir="." failonerror="true">
+      <arg value="${username}@${host}:${dir}/data/live.db"/>
+      <arg value="data/development.db"/>
+    </exec>
+  </target>
+
+  <target name="syncdb" description="syncronise remote database" >
+    <exec executable="ssh" dir="." failonerror="true">
+      <arg value="${username}@${host}"/>
+      <arg value="cd ${dir}; python manage.py syncdb"/>
+    </exec>
+  </target>
+
+</project>

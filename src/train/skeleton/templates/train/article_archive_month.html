@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+    archive for {{month|date:"F Y"}}
+{% endblock %}
+
+{% block content %}
+
+<h1>Archive for {{month|date:"F Y"}}</h1>
+
+{% if object_list %}
+    <ol>
+    {% for article in object_list %}
+        <li><a href="{{article.get_absolute_url}}">{{article.title}}</a> <span> - {{article.html|safe|striptags|truncatewords_html:25}}</span></li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+{% endblock %}

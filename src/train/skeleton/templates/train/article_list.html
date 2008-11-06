@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Articles tagged {{tag}}{% endblock %}
+
+{% block content %}
+
+<h1>Articles tagged {{tag}}</h1>
+
+{% if object_list %}
+    <ul>
+    {% for article in object_list %}
+        <li><a href="{{article.get_absolute_url}}">{{article}}</a> <span> - {{article.html|safe|striptags|truncatewords_html:25}}</span></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if related_tags %}
+    <h2>Related tags</h2>
+    <ul>
+    {% for related_tag in related_tags %}
+        <li><a href="/tags/{{related_tag}}/" rel="tag">{{related_tag}}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

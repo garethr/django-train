@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+    archive for {{year}}
+{% endblock %}
+
+{% block content %}
+
+<h1>Archive for {{year}}</h1>
+
+{% if date_list %}
+    <ol>
+    {% for month in date_list %}
+        <li><a href="{{month|date:"m"}}">{{month|date:"F"}}</a></li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+{% endblock %}

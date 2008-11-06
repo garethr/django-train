@@ -1,0 +1,10 @@
+.gitignore
+.git
+.svn
+data
+settings.py
+*.pyc
+.DS_Store
+build.xml
+rsync.excludes
+backups

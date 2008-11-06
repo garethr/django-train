@@ -1,0 +1,7 @@
+{% if tag_list %}
+    <ul class="tags">
+    {% for tag in tag_list %}
+        <li{% if forloop.last %} class="last"{% endif %}><a href="/tags/{{tag}}/" rel="tag">{{tag}}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
