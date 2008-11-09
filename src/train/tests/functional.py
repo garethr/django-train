@@ -117,4 +117,3 @@ class TemplateTagTests(Functional):
         self.assert_render_contains("<ul", "{% render_tag_list tag_list %}", tag_list = ['tag1','tag2',])
         self.assert_render_contains("tag1", "{% render_tag_list tag_list %}", tag_list = ['tag1','tag2',])
         self.assert_render_contains("tag2", "{% render_tag_list tag_list %}", tag_list = ['tag1','tag2',])
-        
