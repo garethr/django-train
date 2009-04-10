@@ -3,7 +3,7 @@ from django.views.generic import date_based, list_detail
 
 from tagging.views import tagged_object_list
 
-from train.views import tags
+from train.views import tags, tiny
 from train.models import Article
 
 post_home = {
@@ -17,11 +17,18 @@ posts = {
     'date_field': 'pub_date'
 }
 
+tinyposts = {
+    'queryset': Article.objects.filter(status="live").order_by("-pub_date"),
+}
+
 urlpatterns = patterns('',
     url(r'^$',
         list_detail.object_list,
         post_home,
         name='train_article_archive_index'),
+    url(r'^(?P<id>\d+)$',
+        tiny,
+        name='train_article_tinyurl'),
     url(r'^(?P<year>\d{4})/$',
         date_based.archive_year,
         dict(posts, make_object_list=True),

@@ -18,6 +18,14 @@ class PresenceOfPages(Functional):
                 url = article.get_absolute_url()
                 response = self.client.get(url)
                 self.failUnlessEqual(response.status_code, 200)
+                
+    def test_for_article_redirects(self):
+        for article in self.articles:     
+            if article.status == 'live':
+                url = article.get_absolute_url()
+                response = self.client.get('/%s' % article.id)
+                self.assertRedirects(response, url, status_code=301)
+                self.failUnlessEqual(response.status_code, 301)
 
     def test_draft_article_does_not_appear(self):
         for article in self.articles:     
@@ -25,6 +33,23 @@ class PresenceOfPages(Functional):
                 url = article.get_absolute_url()
                 response = self.client.get(url)
                 self.failUnlessEqual(response.status_code, 404)
+
+    def test_draft_articles_dont_redirects(self):
+        for article in self.articles:     
+            if article.status == 'draft':
+                url = article.get_absolute_url()
+                response = self.client.get('/%s/' % article.id)
+                self.failUnlessEqual(response.status_code, 404)
+                
+    def test_draft_articles_redirects_to_slash(self):
+        for article in self.articles:     
+            if article.status == 'draft':
+                url = article.get_absolute_url()
+                response = self.client.get('/%s' % article.id)
+                # draft pages do redirect because of the adding of the
+                # trailing slash, but it's a 302 rather than a 301, which
+                # leads to a 404
+                self.failUnlessEqual(response.status_code, 302)
                                 
 class MarkupTests(Functional):
 
